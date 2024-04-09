@@ -22,5 +22,5 @@ pipenv run python download_bios.py ./teams.json "Syracuse Mets"
 
 Finally, let's print them out. It's a lot of data, so let's grep it to see who used to play for the MLB Phillies:
 ```
-pipenv run python read_bios.py | grep Philadelphia.Phillies
+pipenv run python read_bios.py ./teams.json | grep Philadelphia.Phillies..MLB
 ```

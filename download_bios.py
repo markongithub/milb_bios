@@ -16,7 +16,7 @@ def pairs_from_stats_dict(stats_dict):
     splits = stats_dict['stats'][0]['splits']
     for split in splits:
         if split.get('team'):
-            pairs.append((split['season'], split['team']['name']))
+            pairs.append((split['season'], split['team']))
     return pairs
 
 def pairs_from_roster_dict(roster_dict):
@@ -32,13 +32,13 @@ def get_all_year_pairs(player_id):
     milb_urls = [
         f'https://statsapi.mlb.com/api/v1/people/{player_id}/stats?stats=yearByYear&gameType=R&leagueListId=milb_all&group=hitting&language=en',
         f'https://statsapi.mlb.com/api/v1/people/{player_id}/stats?stats=yearByYear&gameType=R&leagueListId=milb_all&group=pitching&language=en']
-    mlb_pairs = set(sum([pairs_from_stats_dict(requests.get(mlb_url).json()) for mlb_url in mlb_urls], []))
+    mlb_pairs = sum([pairs_from_stats_dict(requests.get(mlb_url).json()) for mlb_url in mlb_urls], [])
     if not mlb_pairs:
         print("No MLB stats. He'll get there someday!")
-    milb_pairs = set(sum([pairs_from_stats_dict(requests.get(milb_url).json()) for milb_url in milb_urls], []))
+    milb_pairs = sum([pairs_from_stats_dict(requests.get(milb_url).json()) for milb_url in milb_urls], [])
     if not milb_pairs:
         print(f'No MiLB stats for {player_id}? That seems wrong. Is today his first day ever?')
-    return list(mlb_pairs.union(milb_pairs))
+    return mlb_pairs + milb_pairs
 
 def get_roster_url(teams_list, team_name):
 #  "teams" : [ {
@@ -70,6 +70,7 @@ teams_list = json.load(open(sys.argv[1]))["teams"]
 current_team_name = sys.argv[2]
 roster_dict = get_roster(teams_list, current_team_name)
 player_pairs = pairs_from_roster_dict(roster_dict)
+# fewer_pairs = player_pairs[0:2]
 
 for player_id, player_name in player_pairs:
     if player_id in milb_bios:
