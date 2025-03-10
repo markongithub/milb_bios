@@ -41,7 +41,7 @@ for player_id in milb_bios:
         else:
             parent_org_name = full_team_dict.get("parentOrgName")
             if parent_org_name and parent_org_name != "Office of the Commissioner":
-                team_name = f"{small_team_dict['name']} ({full_team_dict['sport']['name']} affiliate of the {parent_org_name})"
+                team_name = f"{small_team_dict['name']} (today the {full_team_dict['sport']['name']} affiliate of the {parent_org_name})"
             elif full_team_dict["sport"]["name"] == "Major League Baseball":
                 team_name = f"{small_team_dict['name']} (MLB)"
             else:
