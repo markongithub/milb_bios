@@ -52,7 +52,7 @@ def get_all_year_pairs(player_id):
     )
     if not milb_pairs:
         print(
-            f"No MiLB stats for {player_id}? That seems wrong. Is today his first day ever?"
+            f"No MiLB stats for {player_id}? Either today is his first day in MiLB, he's a Japanese superstar who's never been injured since coming to the US, or this is a bug."
         )
     return mlb_pairs + milb_pairs
 
@@ -79,6 +79,7 @@ def get_roster_url(teams_list, team_name):
 
 def get_roster(teams_list, team_name):
     roster_url = get_roster_url(teams_list, team_name)
+    print(f"DEBUG: Downloading {team_name} roster from {roster_url}")
     return requests.get(roster_url).json()
 
 
@@ -96,6 +97,7 @@ for player_id, player_name in player_pairs:
         print(f"We already have the goods on {player_name}")
         continue
     else:
+        print(f"Beginning downloads for {player_name}...")
         pairs = get_all_year_pairs(player_id)
         milb_bios[player_id] = (player_name, pairs, current_team_name)
         print(f"Updated bio for {player_name}")
